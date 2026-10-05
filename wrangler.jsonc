@@ -1,0 +1,53 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "rolemi-backend",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-16",
+  "observability": { "enabled": true },
+
+  // 默认环境只用于本地开发。`remote: false` 保证 `wrangler dev --local`
+  // 使用电脑上的本地 D1 状态，不会把开发数据写入 Cloudflare 生产库。
+  "vars": {
+    "APP_ENV": "local",
+    "AI_API_URL": "https://api.deepseek.com/responses",
+    "AI_MODEL": "deepseek-v4-flash"
+  },
+  "d1_databases": [
+    {
+      "binding": "rolemi_metrics",
+      "database_name": "rolemi-metrics",
+      "database_id": "be1d8a8b-bc8f-40ee-866b-7f3a812f1939",
+      "remote": false
+    }
+  ],
+
+  // 生产环境显式使用 --env production。业务代码和 binding 名保持不变，
+  // 但 D1、普通变量和 Secret 均从 Cloudflare 生产环境读取。
+  "env": {
+    "production": {
+      "name": "rolemi-backend",
+      // 当前正式扩展直接使用稳定的 workers.dev 地址；不为每个版本额外开放预览 URL。
+      "workers_dev": true,
+      "preview_urls": false,
+      "vars": {
+        "APP_ENV": "production",
+        "AI_API_URL": "https://api.deepseek.com/responses",
+        "AI_MODEL": "deepseek-v4-flash",
+        "AI_QUOTA_DISABLED": "false",
+        "AI_INSTALLATION_DAILY_LIMIT": "20",
+        "AI_INSTALLATION_MINUTE_LIMIT": "6",
+        "AI_GLOBAL_DAILY_LIMIT": "200",
+        "ALLOWED_EXTENSION_ORIGINS": "chrome-extension://nlgnbeobcfgmhlaocpmmlmdaenldpkbe"
+      },
+      "d1_databases": [
+        {
+          "binding": "rolemi_metrics",
+          "database_name": "rolemi-metrics",
+          "database_id": "be1d8a8b-bc8f-40ee-866b-7f3a812f1939"
+        }
+      ],
+      "observability": { "enabled": true },
+      "triggers": { "crons": ["0 3 * * *"] }
+    }
+  }
+}

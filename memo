@@ -1,0 +1,8 @@
+历史规划备忘（保留原始内容，不代表当前实现进度）。截至 2026-09-26，Worker/D1、AI 网关、事件聚合、参数校验和额度控制已实现；当前公开说明见 README.md，内部项目文档不随仓库公开，真实模型与公网部署仍需单独验收。
+
+1. 搭基础设施：创建 Cloudflare Worker，创建 D1，建立 ai_calls 和 events 两张表。你现在基本就在这里，已经快完成了。
+2. 先把统计链路跑通：让 Worker 能向 D1 写数据。ai_calls 记录 AI 调用的模型、字符数、Token、耗时、成功失败等；events 记录 excel_export 这类非 AI 产品行为。这个阶段先证明 Worker → D1 没问题。
+3. 把项目方 API Key 搬到服务端：API Key 不再出现在插件代码里，也不要求普通用户填写，而是作为 Cloudflare Secret 保存。插件永远拿不到真正的 Key。
+4. 做 AI Gateway：这是后台最核心的一步。RoleMI 不再直接请求模型，而是请求 Worker，例如 /api/ai。Worker 临时接收必要的 JD / Resume / Prompt → 使用服务端 Key 调模型 → 得到结果 → 提取 Token、耗时等统计写入 ai_calls → 把模型结果原样返回插件。JD、简历、Prompt、模型结果都不写 D1。
+5. 改 RoleMI 插件：把现有的模型调用层从“直接请求 Provider”替换成“请求 RoleMI Backend”。尽量只改 AI 请求这一层，不动你已经做好的 Deep Analysis → Match → Revision → Greeting 工作流。Excel 导出成功时，则单独发一个轻量 event 请求。
+6. 上线前补安全和额度控制：确认所有流程正常以后，再处理 CORS、请求参数校验、单安装实例调用额度 / Rate Limit、防止别人把你的 Worker 当免费 AI API 使用，然后部署到公网，最后让正式版 RoleMI 指向公网 Worker。

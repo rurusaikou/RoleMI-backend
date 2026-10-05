@@ -1,0 +1,27 @@
+{
+  "name": "rolemi-backend",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "dev:local": "wrangler dev --local",
+    "deploy": "wrangler deploy --env production",
+    "deploy:prod": "wrangler deploy --env production",
+    "secret:prod": "wrangler secret put AI_API_KEY --env production",
+    "secret:list:prod": "wrangler secret list --env production",
+    "db:local:init": "wrangler d1 execute rolemi-metrics --local --file=sql/schema.sql && wrangler d1 execute rolemi-metrics --local --file=sql/event-aggregates.sql",
+    "db:local:tables": "wrangler d1 execute rolemi-metrics --local --command=\"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;\"",
+    "db:local:report": "wrangler d1 execute rolemi-metrics --local --file=sql/report.sql",
+    "db:prod:init": "wrangler d1 execute rolemi-metrics --remote --env production --file=sql/schema.sql && wrangler d1 execute rolemi-metrics --remote --env production --file=sql/event-aggregates.sql",
+    "db:prod:tables": "wrangler d1 execute rolemi-metrics --remote --env production --command=\"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;\"",
+    "db:prod:report": "wrangler d1 execute rolemi-metrics --remote --env production --file=sql/report.sql",
+    "test": "vitest run",
+    "test:worker": "vitest run"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.0.0",
+    "vitest": "~4.1.0",
+    "wrangler": "^4.133.0"
+  }
+}

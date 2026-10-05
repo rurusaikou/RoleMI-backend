@@ -1,0 +1,13 @@
+# Local environment only. Copy this file to .dev.vars and never commit the real secret.
+APP_ENV=local
+AI_API_KEY=replace-with-your-provider-key
+
+# Optional local overrides. AI_API_URL / AI_MODEL normally come from wrangler.jsonc.
+# AI_API_URL=https://api.deepseek.com/responses
+# AI_MODEL=deepseek-v4-flash
+
+# Local quota. Set true while developing if you do not want local calls blocked by RoleMI quota.
+AI_QUOTA_DISABLED=true
+AI_INSTALLATION_DAILY_LIMIT=20
+AI_INSTALLATION_MINUTE_LIMIT=6
+AI_GLOBAL_DAILY_LIMIT=200
