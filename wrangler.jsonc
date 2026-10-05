@@ -37,7 +37,7 @@
         "AI_INSTALLATION_DAILY_LIMIT": "20",
         "AI_INSTALLATION_MINUTE_LIMIT": "6",
         "AI_GLOBAL_DAILY_LIMIT": "200",
-        "ALLOWED_EXTENSION_ORIGINS": "chrome-extension://nlgnbeobcfgmhlaocpmmlmdaenldpkbe"
+        "ALLOWED_EXTENSION_ORIGINS": "chrome-extension://xxxxxxx"
       },
       "d1_databases": [
         {
