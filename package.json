@@ -13,9 +13,11 @@
     "db:local:init": "wrangler d1 execute rolemi-metrics --local --file=sql/schema.sql && wrangler d1 execute rolemi-metrics --local --file=sql/event-aggregates.sql",
     "db:local:tables": "wrangler d1 execute rolemi-metrics --local --command=\"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;\"",
     "db:local:report": "wrangler d1 execute rolemi-metrics --local --file=sql/report.sql",
+    "db:local:analytics": "node scripts/run-product-analytics.mjs local",
     "db:prod:init": "wrangler d1 execute rolemi-metrics --remote --env production --file=sql/schema.sql && wrangler d1 execute rolemi-metrics --remote --env production --file=sql/event-aggregates.sql",
     "db:prod:tables": "wrangler d1 execute rolemi-metrics --remote --env production --command=\"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;\"",
     "db:prod:report": "wrangler d1 execute rolemi-metrics --remote --env production --file=sql/report.sql",
+    "db:prod:analytics": "node scripts/run-product-analytics.mjs production",
     "test": "vitest run",
     "test:worker": "vitest run"
   },

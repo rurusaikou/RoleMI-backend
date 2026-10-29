@@ -98,6 +98,8 @@ npx vitest run test/index.spec.js
 npx wrangler d1 execute rolemi-metrics --local --command="SELECT * FROM ai_calls ORDER BY id DESC LIMIT 20;"
 npx wrangler d1 execute rolemi-metrics --local --command="SELECT name FROM sqlite_master WHERE type='table';"
 npx wrangler d1 execute rolemi-metrics --local --file=sql/report.sql
+npm run db:local:analytics
 ```
 
 以上命令默认查询本地 D1。生产查询必须显式同时使用 `--remote --env production`，并在执行写操作前确认目标 Cloudflare 账号和数据库。
+产品看板查询及完整指标口径见 `PRODUCT_ANALYTICS.md`。
